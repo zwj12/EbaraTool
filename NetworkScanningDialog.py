@@ -1,0 +1,61 @@
+import sys
+from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from Ui.Ui_NetworkScanningDialog import Ui_NetworkScanningDialog
+from zeroconf import ServiceBrowser, Zeroconf, ZeroconfServiceTypes
+
+
+class NetworkScanningDialog(QDialog):
+    def __init__(self):
+        super(NetworkScanningDialog, self).__init__()
+        self.ui = Ui_NetworkScanningDialog()
+        self.ui.setupUi(self)
+        # self.ui.tableWidget_controllerInfo.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableWidget_controllerInfo.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeToContents)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(5, 200)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(7, 200)
+        self.ui.tableWidget_controllerInfo.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableWidget_controllerInfo.setHorizontalHeaderLabels(
+            ['IP Address', 'SystemId', 'ID', 'Availability', 'Virtual'
+                , 'System Name', 'RobotWare Version', 'Controller Name'])
+        self.ui.tableWidget_controllerInfo.setRowCount(0)
+        self.ui.tableWidget_controllerInfo.cellClicked.connect(self.get_current_row)
+        self.ui.tableWidget_controllerInfo.cellDoubleClicked.connect(
+            self.table_controllerInfo_cellDoubleClicked)
+        self.zeroconf = Zeroconf()
+        self.listener = MyListener(self)
+        self.browser = ServiceBrowser(self.zeroconf, "_http._tcp.local.", self.listener)
+        self.current_row = 0
+
+    def get_current_row(self, row, column):
+        self.current_row = row
+
+    def table_controllerInfo_cellDoubleClicked(self, row, column):
+        self.current_row = row
+        reply = QMessageBox.question(self, 'Message',
+                                     "Are you sure to connect this controller?",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.accept()
+
+
+class MyListener:
+    def __init__(self, dialog):
+        self.networkScanningDialog = dialog
+
+    def remove_service(self, zeroconf, type, name):
+        print("Service %s removed" % (name,))
+
+    def add_service(self, zeroconf, type, name):
+        info = zeroconf.get_service_info(type, name)
+        if info.name.startswith("RobotWebServices_"):
+            row_index = self.networkScanningDialog.ui.tableWidget_controllerInfo.rowCount()
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setRowCount(row_index + 1)
+            table_item = QTableWidgetItem('{0}.{1}.{2}.{3}'.format(info.address[0],
+                                                                   info.address[1], info.address[2], info.address[3]))
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 0, table_item)
+            index_end = info.name.find("._http._tcp")
+            table_item = QTableWidgetItem(info.name[17:index_end])
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 5, table_item)
+            table_item = QTableWidgetItem(info.server)
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 7, table_item)
