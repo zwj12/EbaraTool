@@ -3,6 +3,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from Ui.Ui_NetworkScanningDialog import Ui_NetworkScanningDialog
 from zeroconf import ServiceBrowser, Zeroconf, ZeroconfServiceTypes
+from webserviceconnection import WebServiceConnection
 
 
 class NetworkScanningDialog(QDialog):
@@ -11,12 +12,16 @@ class NetworkScanningDialog(QDialog):
         self.ui = Ui_NetworkScanningDialog()
         self.ui.setupUi(self)
         # self.ui.tableWidget_controllerInfo.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.ui.tableWidget_controllerInfo.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeToContents)
-        self.ui.tableWidget_controllerInfo.setColumnWidth(5, 200)
-        self.ui.tableWidget_controllerInfo.setColumnWidth(7, 200)
+        self.ui.tableWidget_controllerInfo.horizontalHeader().setSectionResizeMode(7, QHeaderView.ResizeToContents)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(0, 100)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(1, 40)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(2, 300)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(5, 50)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(6, 200)
+        self.ui.tableWidget_controllerInfo.setColumnWidth(8, 200)
         self.ui.tableWidget_controllerInfo.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget_controllerInfo.setHorizontalHeaderLabels(
-            ['IP Address', 'SystemId', 'ID', 'Availability', 'Virtual'
+            ['IP Address', 'Port', 'SystemId', 'ID', 'Availability', 'Virtual'
                 , 'System Name', 'RobotWare Version', 'Controller Name'])
         self.ui.tableWidget_controllerInfo.setRowCount(0)
         self.ui.tableWidget_controllerInfo.cellClicked.connect(self.get_current_row)
@@ -51,11 +56,32 @@ class MyListener:
         if info.name.startswith("RobotWebServices_"):
             row_index = self.networkScanningDialog.ui.tableWidget_controllerInfo.rowCount()
             self.networkScanningDialog.ui.tableWidget_controllerInfo.setRowCount(row_index + 1)
-            table_item = QTableWidgetItem('{0}.{1}.{2}.{3}'.format(info.address[0],
-                                                                   info.address[1], info.address[2], info.address[3]))
+            ip_address = '{0}.{1}.{2}.{3}'.format(info.address[0], info.address[1], info.address[2], info.address[3])
+            table_item = QTableWidgetItem(ip_address)
             self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 0, table_item)
-            index_end = info.name.find("._http._tcp")
-            table_item = QTableWidgetItem(info.name[17:index_end])
-            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 5, table_item)
-            table_item = QTableWidgetItem(info.server)
+            table_item = QTableWidgetItem('{0}'.format(info.port))
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 1, table_item)
+            # index_end = info.name.find("._http._tcp")
+            # table_item = QTableWidgetItem(info.name[17:index_end])
+            # self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 6, table_item)
+            # table_item = QTableWidgetItem(info.server)
+            # self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 8, table_item)
+            username = "Default User"
+            password = "robotics"
+            web_service_connection = WebServiceConnection(ip_address, info.port, username, password)
+            check_box = QTableWidgetItem()
+            if WebServiceConnection.get_ctrl_type() == True:
+                check_box.setCheckState(Qt.Checked)
+            else:
+                check_box.setCheckState(Qt.Unchecked)
+                check_box.setFlags(check_box.flags() & (~Qt.ItemIsEnabled))
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 5, check_box)
+            table_item = QTableWidgetItem(WebServiceConnection.get_system_guid())
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 2, table_item)
+            table_item = QTableWidgetItem(WebServiceConnection.get_rw_version())
             self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 7, table_item)
+            table_item = QTableWidgetItem(WebServiceConnection.get_system_name())
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 6, table_item)
+            table_item = QTableWidgetItem(WebServiceConnection.get_ctrl_name())
+            self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 8, table_item)
+

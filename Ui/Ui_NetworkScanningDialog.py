@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'Ui_NetworkScanningDialog.ui',
 # licensing of 'Ui_NetworkScanningDialog.ui' applies.
 #
-# Created: Sat Jan 12 16:21:05 2019
+# Created: Sat Jan 12 21:27:09 2019
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1542405709
 #
 # WARNING! All changes made in this file will be lost!
@@ -37,9 +37,9 @@ class Ui_NetworkScanningDialog(object):
         self.gridLayout_button.addWidget(self.buttonBox, 0, 2, 1, 1)
         self.gridLayout_Dialog.addLayout(self.gridLayout_button, 3, 0, 1, 1)
         self.tableWidget_controllerInfo = QtWidgets.QTableWidget(NetworkScanningDialog)
-        self.tableWidget_controllerInfo.setColumnCount(8)
+        self.tableWidget_controllerInfo.setColumnCount(9)
         self.tableWidget_controllerInfo.setObjectName("tableWidget_controllerInfo")
-        self.tableWidget_controllerInfo.setColumnCount(8)
+        self.tableWidget_controllerInfo.setColumnCount(9)
         self.tableWidget_controllerInfo.setRowCount(0)
         self.tableWidget_controllerInfo.horizontalHeader().setMinimumSectionSize(31)
         self.tableWidget_controllerInfo.verticalHeader().setDefaultSectionSize(30)

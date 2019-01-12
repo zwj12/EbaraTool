@@ -56,7 +56,7 @@
    <item row="1" column="0">
     <widget class="QTableWidget" name="tableWidget_controllerInfo">
      <property name="columnCount">
-      <number>8</number>
+      <number>9</number>
      </property>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>31</number>
@@ -67,6 +67,7 @@
      <attribute name="verticalHeaderMinimumSectionSize">
       <number>23</number>
      </attribute>
+     <column/>
      <column/>
      <column/>
      <column/>
