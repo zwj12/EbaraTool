@@ -1,44 +1,53 @@
-# -*- coding: utf-8 -*-
+import sys
+from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from Ui.Ui_MainWindow import Ui_MainWindow
+from NetworkScanningDialog import NetworkScanningDialog
+from zeroconf import ServiceBrowser, Zeroconf, ZeroconfServiceTypes
+from webserviceconnection import WebServiceConnection
 
-# Form implementation generated from reading ui file 'MainWindow.ui',
-# licensing of 'MainWindow.ui' applies.
-#
-# Created: Tue Jan  8 19:59:09 2019
-#      by: pyside2-uic  running on PySide2 5.12.0
-#
-# WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore, QtGui, QtWidgets
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.status_bar = self.statusBar()
+        self.status_bar.showMessage('Ready')
+        self.comNum = QLabel('串口号：')
+        self.baudNum = QLabel('波特率:')
+        self.status_bar.addPermanentWidget(self.comNum, stretch=3)
+        self.status_bar.addPermanentWidget(self.baudNum, stretch=1)
+        self.ui.action_AddController.triggered.connect(self.add_controller)
+        self.ui.action_View_statusbar.triggered.connect(self.toggle_menu)
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(190, 200, 75, 23))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(210, 270, 75, 23))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(130, 340, 104, 71))
-        self.textEdit.setObjectName("textEdit")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+    def add_controller(self):
+        network_scanning_dialog = NetworkScanningDialog()
+        if network_scanning_dialog.exec_() == QDialog.Accepted:
+            print(WebServiceConnection.get_system_name())
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    def toggle_menu(self, state):
+        if state:
+            self.status_bar.show()
+        else:
+            self.status_bar.hide()
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
-        self.pushButton.setText(QtWidgets.QApplication.translate("MainWindow", "PushButton", None, -1))
-        self.pushButton_2.setText(QtWidgets.QApplication.translate("MainWindow", "PushButton", None, -1))
+    def contextMenuEvent(self, event):
+        cmenu = QMenu(self)
+        newAct = cmenu.addAction("New")
+        opnAct = cmenu.addAction("Open")
+        quitAct = cmenu.addAction("Quit")
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+        if action == quitAct:
+            qApp.quit()
 
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.close()
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())

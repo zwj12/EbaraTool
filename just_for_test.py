@@ -1,5 +1,6 @@
 from zeroconf import ServiceBrowser, Zeroconf
 from zeroconf import ZeroconfServiceTypes
+# http://zetcode.com/gui/pyqt5/
 
 
 class MyListener:

@@ -49,7 +49,19 @@ class MyListener:
         self.networkScanningDialog = dialog
 
     def remove_service(self, zeroconf, type, name):
-        print("Service %s removed" % (name,))
+        info = zeroconf.get_service_info(type, name)
+        if info.name.startswith("RobotWebServices_"):
+            ip_address = '{0}.{1}.{2}.{3}'.format(info.address[0], info.address[1], info.address[2], info.address[3])
+            index_end = info.name.find("._http._tcp")
+            system_name = info.name[17:index_end]
+            items = self.networkScanningDialog.ui.tableWidget_controllerInfo.findItems(ip_address, Qt.MatchExactly)
+            if len(items) > 0:
+                for item in items:
+                    # self.networkScanningDialog.ui.tableWidget_controllerInfo.removeRow(item.row())
+                    item_system_name = \
+                        self.networkScanningDialog.ui.tableWidget_controllerInfo.item(item.row(), 6).text()
+                    if item_system_name == system_name:
+                        self.networkScanningDialog.ui.tableWidget_controllerInfo.removeRow(item.row())
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
