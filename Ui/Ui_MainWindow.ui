@@ -13,14 +13,97 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>341</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_WeldLegWidth">
+       <property name="text">
+        <string>WeldLegWidth</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="lineEdit_Index"/>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="lineEdit_GrooveGap"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_SeamCenterX">
+       <property name="text">
+        <string>SeamCenterX</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_GrooveGap">
+       <property name="text">
+        <string>GrooveGap</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_BranchGrooveRoot">
+       <property name="text">
+        <string>BranchGrooveRoot</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEdit_BranchGrooveRoot"/>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="lineEdit_BranchGrooveAngle"/>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLineEdit" name="lineEdit_SeamCenterX"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEdit_WeldLegWidth"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_BranchGrooveAngle">
+       <property name="text">
+        <string>BranchGrooveAngle</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_Index">
+       <property name="text">
+        <string>Index</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>SeamNormalAngle</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLineEdit" name="lineEdit_SeamNormalAngle"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Controller">

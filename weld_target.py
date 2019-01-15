@@ -43,27 +43,27 @@ class WeldTarget:
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_process_type = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_offset_x = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_offset_y = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_offset_z = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_rotation_x = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_rotation_y = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_tcs_rotation_z = str_weld_target[num_start_index:num_stop_index]
@@ -74,46 +74,46 @@ class WeldTarget:
         # console.log("num_start_index=" + num_start_index)
         while num_stop_index < len(str_weld_target):
             num_stop_index = str_weld_target.index("\"", num_stop_index)
-            if str_weld_target[num_stop_index+1] != "\"":
+            if str_weld_target[num_stop_index + 1] != "\"":
                 break
             else:
                 num_stop_index = num_stop_index + 2
         self.str_weld_procedure_id = str_weld_target[num_start_index:num_stop_index]
         num_stop_index = str_weld_target.index(",", num_stop_index + 1)
-        
+
         num_start_index = num_stop_index + 1
         num_start_index = str_weld_target.index("\"", num_start_index) + 1
         num_stop_index = num_start_index
         # console.log("num_start_index=" + num_start_index)
         while num_stop_index < len(str_weld_target):
             num_stop_index = str_weld_target.index("\"", num_stop_index)
-            if str_weld_target[num_stop_index+1] != "\"":
+            if str_weld_target[num_stop_index + 1] != "\"":
                 break
             else:
                 num_stop_index = num_stop_index + 2
         self.str_remark = str_weld_target[num_start_index:num_stop_index]
         num_stop_index = str_weld_target.index(",", num_stop_index + 1)
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_w_obj_x = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_w_obj_y = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_w_obj_z = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_w_obj_ez = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index(",", num_start_index)
         self.num_w_obj_ey = str_weld_target[num_start_index:num_stop_index]
-        
+
         num_start_index = num_stop_index + 1
         num_stop_index = str_weld_target.index("]", num_start_index)
         self.num_w_obj_ex = str_weld_target[num_start_index:num_stop_index]
@@ -158,7 +158,8 @@ class WeldTarget:
     def set_data_to_web_service(self, host, username, password):
         digest_auth = HTTPDigestAuth(username, password)
         str_prefix = "http://{0}/rw/rapid/symbol/data/RAPID/T_ROB1/GlobalDataModule".format(host)
-        str_post_url = "{0}/rRob{1}Layer{2}{{{3}}}?action=set".format(str_prefix, self.num_rob, self.num_layer, self.num_index)
+        str_post_url = "{0}/rRob{1}Layer{2}{{{3}}}?action=set".format(str_prefix, self.num_rob, self.num_layer,
+                                                                      self.num_index)
         payload = {"value": self.to_string()}
         requests.post(str_post_url, auth=digest_auth, data=payload)
 

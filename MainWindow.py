@@ -5,6 +5,7 @@ from Ui.Ui_MainWindow import Ui_MainWindow
 from NetworkScanningDialog import NetworkScanningDialog
 from zeroconf import ServiceBrowser, Zeroconf, ZeroconfServiceTypes
 from webserviceconnection import WebServiceConnection
+from pipe_groove_model import PipeGrooveModel
 
 
 class MainWindow(QMainWindow):
@@ -14,17 +15,21 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.status_bar = self.statusBar()
         self.status_bar.showMessage('Ready')
-        self.comNum = QLabel('串口号：')
-        self.baudNum = QLabel('波特率:')
-        self.status_bar.addPermanentWidget(self.comNum, stretch=3)
-        self.status_bar.addPermanentWidget(self.baudNum, stretch=1)
+        self.status_ipaddress = QLabel('IP Address：')
+        self.status_connection = QLabel('Connection: Not Connected')
+        self.status_bar.addPermanentWidget(self.status_ipaddress, stretch=3)
+        self.status_bar.addPermanentWidget(self.status_connection, stretch=1)
         self.ui.action_AddController.triggered.connect(self.add_controller)
         self.ui.action_View_statusbar.triggered.connect(self.toggle_menu)
 
     def add_controller(self):
         network_scanning_dialog = NetworkScanningDialog()
         if network_scanning_dialog.exec_() == QDialog.Accepted:
-            print(WebServiceConnection.get_system_name())
+            self.status_ipaddress.setText('IP Address：{0}'.format(WebServiceConnection.get_host()))
+            self.status_connection.setText('Connection: Connected')
+            pipe_groove_model = PipeGrooveModel()
+            pipe_groove_model.get_data_from_web_service()
+            print(pipe_groove_model.to_string())
 
     def toggle_menu(self, state):
         if state:

@@ -87,6 +87,8 @@ class MyListener:
             else:
                 check_box.setCheckState(Qt.Unchecked)
                 check_box.setFlags(check_box.flags() & (~Qt.ItemIsEnabled))
+                table_item = QTableWidgetItem(WebServiceConnection.get_ctrl_id())
+                self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 3, table_item)
             self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 5, check_box)
             table_item = QTableWidgetItem(WebServiceConnection.get_system_guid())
             self.networkScanningDialog.ui.tableWidget_controllerInfo.setItem(row_index, 2, table_item)

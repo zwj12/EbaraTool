@@ -4,6 +4,9 @@ import xml.etree.ElementTree as ET
 import json
 
 
+# dns-sd -B _http._tcp,rws
+# dns-sd -L "RobotWebServices_1600-515088" _http._tcp
+# dns-sd -Q CN-L-0317001.local.
 class WebServiceConnection:
     __session = None
     __host = None
@@ -16,6 +19,7 @@ class WebServiceConnection:
     __sysid = None
     __ctrl_name = None
     __ctrl_type = False
+    __ctrl_id = False
     __namespace = '{http://www.w3.org/1999/xhtml}'
 
     @staticmethod
@@ -31,6 +35,14 @@ class WebServiceConnection:
             raise Exception("No Host!")
         else:
             return WebServiceConnection.__host
+
+    @staticmethod
+    def get_port():
+        if WebServiceConnection.__port is None:
+            return 80
+            # raise Exception("No Port!")
+        else:
+            return WebServiceConnection.__port
 
     @staticmethod
     def get_cookies():
@@ -52,6 +64,13 @@ class WebServiceConnection:
             raise Exception("No Control Type!")
         else:
             return WebServiceConnection.__ctrl_type
+
+    @staticmethod
+    def get_ctrl_id() -> bool:
+        if WebServiceConnection.__ctrl_id is None:
+            raise Exception("No Control ID!")
+        else:
+            return WebServiceConnection.__ctrl_id
 
     @staticmethod
     def get_system_name():
@@ -91,8 +110,8 @@ class WebServiceConnection:
         WebServiceConnection.__sysid = obj["_embedded"]["_state"][0]["sysid"]
         # For xml format data
         url = "http://{0}:{1}/ctrl".format(host, port)
-        resp = WebServiceConnection.__session.get(url, auth=digest_auth)
-        WebServiceConnection.__cookies = resp.cookies
+        resp = WebServiceConnection.__session.get(url, cookies=WebServiceConnection.__cookies)
+        # print(resp.text)
         root = ET.fromstring(resp.text)
         if root.findall(".//{0}li[@class='ctrl-identity-info-li']".format(WebServiceConnection.__namespace)):
             WebServiceConnection.__ctrl_name = root.find(
@@ -100,9 +119,12 @@ class WebServiceConnection:
                 .format(WebServiceConnection.__namespace)).text
             controller_type = root.find(
                 ".//{0}li[@class='ctrl-identity-info-li']/{0}span[@class='ctrl-type']"
-                    .format(WebServiceConnection.__namespace)).text
+                .format(WebServiceConnection.__namespace)).text
             if controller_type == "Virtual Controller":
                 WebServiceConnection.__ctrl_type = True
-            else:
+            elif controller_type == "Real Controller":
                 WebServiceConnection.__ctrl_type = False
+                WebServiceConnection.__ctrl_id = root.find(
+                    ".//{0}li[@class='ctrl-identity-info-li']/{0}span[@class='ctrl-id']"
+                    .format(WebServiceConnection.__namespace)).text
 
