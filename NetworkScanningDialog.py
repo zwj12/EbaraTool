@@ -3,7 +3,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from Ui.Ui_NetworkScanningDialog import Ui_NetworkScanningDialog
 from zeroconf import ServiceBrowser, Zeroconf, ZeroconfServiceTypes
-from webserviceconnection import WebServiceConnection
+from web_service_connection import WebServiceConnection
 
 
 class NetworkScanningDialog(QDialog):

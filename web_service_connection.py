@@ -128,3 +128,33 @@ class WebServiceConnection:
                     ".//{0}li[@class='ctrl-identity-info-li']/{0}span[@class='ctrl-id']"
                     .format(WebServiceConnection.__namespace)).text
 
+    # RMMP stands for Request Manual Mode Privileges.
+    @staticmethod
+    def request_manual_mode_privileges():
+        url = "http://{0}:{1}/users/rmmp".format(WebServiceConnection.__host, WebServiceConnection.__port)
+        payload = {"privilege": "modify"}
+        resp = WebServiceConnection.__session.post(url, cookies=WebServiceConnection.__cookies, data=payload)
+        print(resp.status_code)
+
+    @staticmethod
+    def cancel_manual_mode_privileges():
+        url = "http://{0}:{1}/users/rmmp?action=cancel".format(WebServiceConnection.__host, WebServiceConnection.__port)
+        resp = WebServiceConnection.__session.post(url, cookies=WebServiceConnection.__cookies)
+        print(resp.status_code)
+
+    @staticmethod
+    def request_master_ship():
+        url = "http://{0}:{1}/rw/mastership?action=request".format(WebServiceConnection.__host
+                                                                   , WebServiceConnection.__port)
+        resp = WebServiceConnection.__session.post(url, cookies=WebServiceConnection.__cookies)
+        print(resp.status_code)
+        print("Master ship is requested")
+
+    @staticmethod
+    def release_master_ship():
+        url = "http://{0}:{1}/rw/mastership?action=release".format(WebServiceConnection.__host
+                                                                   , WebServiceConnection.__port)
+        resp = WebServiceConnection.__session.post(url, cookies=WebServiceConnection.__cookies)
+        print(resp.status_code)
+        print("Master ship is released")
+

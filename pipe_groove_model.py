@@ -5,7 +5,7 @@ import json
 from ws4py.client.threadedclient import WebSocketClient
 import requests
 from requests.auth import HTTPDigestAuth
-from webserviceconnection import WebServiceConnection
+from web_service_connection import WebServiceConnection
 
 
 class PipeGrooveModel:

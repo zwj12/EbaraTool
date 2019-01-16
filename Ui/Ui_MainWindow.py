@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'Ui_MainWindow.ui',
 # licensing of 'Ui_MainWindow.ui' applies.
 #
-# Created: Mon Jan 14 20:42:56 2019
+# Created: Wed Jan 16 12:46:49 2019
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -64,6 +64,15 @@ class Ui_MainWindow(object):
         self.lineEdit_SeamNormalAngle = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lineEdit_SeamNormalAngle.setObjectName("lineEdit_SeamNormalAngle")
         self.gridLayout.addWidget(self.lineEdit_SeamNormalAngle, 6, 2, 1, 1)
+        self.pushButton_RequestWriteAccess = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_RequestWriteAccess.setGeometry(QtCore.QRect(250, 290, 141, 23))
+        self.pushButton_RequestWriteAccess.setObjectName("pushButton_RequestWriteAccess")
+        self.pushButton_ReleaseWriteAccess = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_ReleaseWriteAccess.setGeometry(QtCore.QRect(250, 390, 141, 23))
+        self.pushButton_ReleaseWriteAccess.setObjectName("pushButton_ReleaseWriteAccess")
+        self.pushButton_Update = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Update.setGeometry(QtCore.QRect(250, 340, 141, 23))
+        self.pushButton_Update.setObjectName("pushButton_Update")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -108,6 +117,9 @@ class Ui_MainWindow(object):
         self.label_BranchGrooveAngle.setText(QtWidgets.QApplication.translate("MainWindow", "BranchGrooveAngle", None, -1))
         self.label_Index.setText(QtWidgets.QApplication.translate("MainWindow", "Index", None, -1))
         self.label_7.setText(QtWidgets.QApplication.translate("MainWindow", "SeamNormalAngle", None, -1))
+        self.pushButton_RequestWriteAccess.setText(QtWidgets.QApplication.translate("MainWindow", "Request Write Access", None, -1))
+        self.pushButton_ReleaseWriteAccess.setText(QtWidgets.QApplication.translate("MainWindow", "Release Write Access", None, -1))
+        self.pushButton_Update.setText(QtWidgets.QApplication.translate("MainWindow", "Update", None, -1))
         self.menu_Controller.setTitle(QtWidgets.QApplication.translate("MainWindow", "&Controller", None, -1))
         self.menu_View.setTitle(QtWidgets.QApplication.translate("MainWindow", "&View", None, -1))
         self.toolBar.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "toolBar", None, -1))

@@ -95,7 +95,9 @@ def main(argv):
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument("-host", help="The host to connect. Defaults to localhost on port 80",
-                            default='localhost:8680')
+                            default='localhost:80')
+        # parser.add_argument("-host", help="The host to connect. Defaults to localhost on port 80",
+        #                     default='192.168.0.88')
         parser.add_argument("-user", help="The login user name. Defaults to default user name", default='Default User')
         parser.add_argument("-passcode", help="The login password. Defaults to default password", default='robotics')
         parser.add_argument("-debug", help="Enable HTTP level debugging.", action='store_true')

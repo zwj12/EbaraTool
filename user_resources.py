@@ -1,7 +1,7 @@
 from requests.auth import HTTPDigestAuth
 import requests
 import xml.etree.ElementTree as ET
-from webserviceconnection import WebServiceConnection
+from web_service_connection import WebServiceConnection
 
 
 class UserResources:
