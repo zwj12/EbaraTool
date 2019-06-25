@@ -43,6 +43,7 @@ class RWPanel:
         self.password = password
         self.digest_auth = HTTPDigestAuth(self.username, self.password)
         self.subscription_url = 'http://{0}/subscription'.format(self.host)
+        self.session = requests.Session()
 
     def subscribe(self):
         # Create a payload to subscribe on RobotWare Panel Resources with high priority
@@ -54,25 +55,22 @@ class RWPanel:
                    '3': '/rw/panel/opmode',
                    '3-p': '1'}
 
-        resp = requests.post(self.subscription_url, auth=self.digest_auth, data=payload)
+        resp = self.session.post(self.subscription_url, auth=self.digest_auth, data=payload)
         print("Initial Events : ")
         print_event(resp.text)
         if resp.status_code == 201:
             self.location = resp.headers['Location']
-            self.cookie = 'ABBCX={0}'.format(resp.cookies['ABBCX'])
+            self.cookie = '-http-session-={0}; ABBCX={1}'.format(resp.cookies['-http-session-'], resp.cookies['ABBCX'])
             return True
         else:
             print('Error subscribing ' + str(resp.status_code))
             return False
 
     def start_recv_events(self):
-        # It is not enough to just send the Cookie. The Authorization header should be included for Web Socket Upgrade
-        # request otherwise we get an Unauthorized error.
-        header = [('Cookie', self.cookie),
-                  ('Authorization', self.digest_auth.build_digest_header("GET", self.subscription_url))]
+        self.header = [('Cookie', self.cookie)]
         self.ws = RobWebSocketClient(self.location,
                                      protocols=['robapi2_subscription'],
-                                     headers=header)
+                                     headers=self.header)
         self.ws.connect()
         self.ws.run_forever()
 
@@ -82,8 +80,8 @@ class RWPanel:
 
 def enable_http_debug():
     import logging
-    import http.client
-    http.client.HTTPConnection.debuglevel = 1
+    import httplib
+    httplib.HTTPConnection.debuglevel = 1
     logging.basicConfig()  # Initialize logging
     logging.getLogger().setLevel(logging.DEBUG)
     requests_log = logging.getLogger("requests.packages.urllib3")
@@ -95,9 +93,7 @@ def main(argv):
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument("-host", help="The host to connect. Defaults to localhost on port 80",
-                            default='localhost:80')
-        # parser.add_argument("-host", help="The host to connect. Defaults to localhost on port 80",
-        #                     default='192.168.0.88')
+                            default='localhost:8681')
         parser.add_argument("-user", help="The login user name. Defaults to default user name", default='Default User')
         parser.add_argument("-passcode", help="The login password. Defaults to default password", default='robotics')
         parser.add_argument("-debug", help="Enable HTTP level debugging.", action='store_true')
@@ -115,11 +111,5 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-
-
-
-
-
-
 
 
