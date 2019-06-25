@@ -1,4 +1,4 @@
-import sys
+import sys, logging
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from Ui.Ui_MainWindow import Ui_MainWindow
@@ -40,6 +40,16 @@ class MainWindow(QMainWindow):
             self.ui.lineEdit_SeamCenterX.setText(str(self.pipe_groove_model.num_seam_centerX))
             self.ui.lineEdit_SeamNormalAngle.setText(str(self.pipe_groove_model.num_seam_normal_angle))
             self.ui.lineEdit_WeldLegWidth.setText(str(self.pipe_groove_model.num_weld_leg_width))
+        else:
+            logging.basicConfig(filename='example1.log', level=logging.DEBUG, style='{'
+                                ,format='{asctime}:{levelname}:{message}')
+            logging.debug('This message should go to the log file')
+            logging.info('So should this')
+            logging.warning('And this, too')
+            logging.warning('%s before you %s', 'Look', 'leap!',
+                            exc_info=True, stack_info=True,  extra={'user': 'Tom', 'ip': '47.98.53.222'})
+            logging.log()
+            # logging.warning("{0} before you ", "Look")
 
     def update_data(self):
         self.pipe_groove_model.num_index = float(self.ui.lineEdit_Index.text())
